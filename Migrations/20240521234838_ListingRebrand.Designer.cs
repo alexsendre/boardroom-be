@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521234838_ListingRebrand")]
+    partial class ListingRebrand
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,6 +85,18 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
 
@@ -103,6 +117,9 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
+                            Email = "jordancarter@test.com",
+                            FirstName = "Jordan",
+                            LastName = "Carter",
                             PaymentTypeId = 1,
                             RoomId = 1,
                             Total = 30.00m,
@@ -111,6 +128,9 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 2,
+                            Email = "postmalone@gmail.com",
+                            FirstName = "Austin",
+                            LastName = "Post",
                             PaymentTypeId = 2,
                             RoomId = 3,
                             Total = 489.38m,
@@ -119,6 +139,9 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 3,
+                            Email = "jenjo@gmail.com",
+                            FirstName = "Jen",
+                            LastName = "Jones",
                             PaymentTypeId = 3,
                             RoomId = 2,
                             Total = 89.83m,
@@ -281,23 +304,11 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsHost")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("integer");
@@ -324,33 +335,24 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "jordancarter@test.com",
-                            FirstName = "Jordan",
                             ImageUrl = "https://cdns-images.dzcdn.net/images/artist/16cc4a271b96586a46c35d8182412e92/1900x1900-000000-80-0-0.jpg",
                             IsHost = false,
-                            LastName = "Carter",
                             Uid = "uid1",
                             Username = "jordancarter"
                         },
                         new
                         {
                             Id = 2,
-                            Email = "postmalone@gmail.com",
-                            FirstName = "Austin",
                             ImageUrl = "https://m.media-amazon.com/images/M/MV5BODg4N2I0NmEtNTIyMS00MzVjLThjYzgtODAwMzcwYThkMTVkXkEyXkFqcGdeQXVyMTI2Nzk3NzI4._V1_FMjpg_UX1000_.jpg",
                             IsHost = false,
-                            LastName = "Post",
                             Uid = "uid1",
                             Username = "testcase"
                         },
                         new
                         {
                             Id = 3,
-                            Email = "jenjo@gmail.com",
-                            FirstName = "Jen",
                             ImageUrl = "https://imageio.forbes.com/specials-images/imageserve/1189837141/2019-American-Music-Awards---Red-Carpet/960x0.jpg?format=jpg&width=960",
                             IsHost = false,
-                            LastName = "Jones",
                             Uid = "uid1",
                             Username = "fishtank"
                         });
@@ -376,12 +378,12 @@ namespace BoardRoom.Migrations
                     b.Property<int>("ItemsId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RoomsId")
+                    b.Property<int>("ListingsId")
                         .HasColumnType("integer");
 
-                    b.HasKey("ItemsId", "RoomsId");
+                    b.HasKey("ItemsId", "ListingsId");
 
-                    b.HasIndex("RoomsId");
+                    b.HasIndex("ListingsId");
 
                     b.ToTable("ItemRoom");
                 });
@@ -436,7 +438,7 @@ namespace BoardRoom.Migrations
 
                     b.HasOne("BoardRoom.Models.Room", null)
                         .WithMany()
-                        .HasForeignKey("RoomsId")
+                        .HasForeignKey("ListingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

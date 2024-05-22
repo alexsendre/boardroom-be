@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 ItemRequests.Map(app);
-ListingRequests.Map(app);
+OrderRequests.Map(app);
 PaymentTypeRequests.Map(app);
 RoomRequests.Map(app);
 TagRequests.Map(app);

@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240518171829_DatabaseLinking")]
+    partial class DatabaseLinking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,13 +77,25 @@ namespace BoardRoom.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BoardRoom.Models.Order", b =>
+            modelBuilder.Entity("BoardRoom.Models.Listing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
@@ -97,12 +111,15 @@ namespace BoardRoom.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Listings");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            Email = "jordancarter@test.com",
+                            FirstName = "Jordan",
+                            LastName = "Carter",
                             PaymentTypeId = 1,
                             RoomId = 1,
                             Total = 30.00m,
@@ -111,6 +128,9 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 2,
+                            Email = "postmalone@gmail.com",
+                            FirstName = "Austin",
+                            LastName = "Post",
                             PaymentTypeId = 2,
                             RoomId = 3,
                             Total = 489.38m,
@@ -119,6 +139,9 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 3,
+                            Email = "jenjo@gmail.com",
+                            FirstName = "Jen",
+                            LastName = "Jones",
                             PaymentTypeId = 3,
                             RoomId = 2,
                             Total = 89.83m,
@@ -173,9 +196,6 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("HostId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
@@ -183,7 +203,10 @@ namespace BoardRoom.Migrations
                     b.Property<bool>("IsLeasable")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ListingId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
@@ -193,9 +216,14 @@ namespace BoardRoom.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("ListingId");
 
                     b.ToTable("Rooms");
 
@@ -203,29 +231,29 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            HostId = 1,
                             ImageUrl = "https://i.pinimg.com/564x/59/fb/79/59fb7976ceae747a206a79a426093824.jpg",
                             IsLeasable = true,
                             Price = 39.99m,
-                            Title = "Room 1"
+                            Title = "Room 1",
+                            UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            HostId = 2,
                             ImageUrl = "https://i.pinimg.com/564x/c5/f7/78/c5f7782a1e831c2d2f481404f39a3588.jpg",
                             IsLeasable = true,
                             Price = 49.99m,
-                            Title = "Room 2"
+                            Title = "Room 2",
+                            UserId = 2
                         },
                         new
                         {
                             Id = 3,
-                            HostId = 3,
                             ImageUrl = "https://i.pinimg.com/564x/70/28/82/702882477d62e948ae11f3f73cce3a66.jpg",
                             IsLeasable = false,
                             Price = 59.99m,
-                            Title = "Room 3"
+                            Title = "Room 3",
+                            UserId = 3
                         });
                 });
 
@@ -241,12 +269,7 @@ namespace BoardRoom.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("RoomId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Tags");
 
@@ -281,25 +304,13 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsHost")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("OrderId")
+                    b.Property<int?>("ListingId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("RoomId")
@@ -314,7 +325,7 @@ namespace BoardRoom.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("ListingId");
 
                     b.HasIndex("RoomId");
 
@@ -324,124 +335,57 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "jordancarter@test.com",
-                            FirstName = "Jordan",
                             ImageUrl = "https://cdns-images.dzcdn.net/images/artist/16cc4a271b96586a46c35d8182412e92/1900x1900-000000-80-0-0.jpg",
                             IsHost = false,
-                            LastName = "Carter",
                             Uid = "uid1",
                             Username = "jordancarter"
                         },
                         new
                         {
                             Id = 2,
-                            Email = "postmalone@gmail.com",
-                            FirstName = "Austin",
                             ImageUrl = "https://m.media-amazon.com/images/M/MV5BODg4N2I0NmEtNTIyMS00MzVjLThjYzgtODAwMzcwYThkMTVkXkEyXkFqcGdeQXVyMTI2Nzk3NzI4._V1_FMjpg_UX1000_.jpg",
                             IsHost = false,
-                            LastName = "Post",
                             Uid = "uid1",
                             Username = "testcase"
                         },
                         new
                         {
                             Id = 3,
-                            Email = "jenjo@gmail.com",
-                            FirstName = "Jen",
                             ImageUrl = "https://imageio.forbes.com/specials-images/imageserve/1189837141/2019-American-Music-Awards---Red-Carpet/960x0.jpg?format=jpg&width=960",
                             IsHost = false,
-                            LastName = "Jones",
                             Uid = "uid1",
                             Username = "fishtank"
                         });
                 });
 
-            modelBuilder.Entity("ItemOrder", b =>
-                {
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ItemsId", "OrdersId");
-
-                    b.HasIndex("OrdersId");
-
-                    b.ToTable("ItemOrder");
-                });
-
-            modelBuilder.Entity("ItemRoom", b =>
-                {
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ItemsId", "RoomsId");
-
-                    b.HasIndex("RoomsId");
-
-                    b.ToTable("ItemRoom");
-                });
-
             modelBuilder.Entity("BoardRoom.Models.Room", b =>
                 {
-                    b.HasOne("BoardRoom.Models.Order", null)
+                    b.HasOne("BoardRoom.Models.Item", null)
                         .WithMany("Rooms")
-                        .HasForeignKey("OrderId");
-                });
+                        .HasForeignKey("ItemId");
 
-            modelBuilder.Entity("BoardRoom.Models.Tag", b =>
-                {
-                    b.HasOne("BoardRoom.Models.Room", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("RoomId");
+                    b.HasOne("BoardRoom.Models.Listing", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("ListingId");
                 });
 
             modelBuilder.Entity("BoardRoom.Models.User", b =>
                 {
-                    b.HasOne("BoardRoom.Models.Order", null)
+                    b.HasOne("BoardRoom.Models.Listing", null)
                         .WithMany("Users")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("ListingId");
 
                     b.HasOne("BoardRoom.Models.Room", null)
                         .WithMany("Users")
                         .HasForeignKey("RoomId");
                 });
 
-            modelBuilder.Entity("ItemOrder", b =>
+            modelBuilder.Entity("BoardRoom.Models.Item", b =>
                 {
-                    b.HasOne("BoardRoom.Models.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoardRoom.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("ItemRoom", b =>
-                {
-                    b.HasOne("BoardRoom.Models.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoardRoom.Models.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BoardRoom.Models.Order", b =>
+            modelBuilder.Entity("BoardRoom.Models.Listing", b =>
                 {
                     b.Navigation("Rooms");
 
@@ -450,8 +394,6 @@ namespace BoardRoom.Migrations
 
             modelBuilder.Entity("BoardRoom.Models.Room", b =>
                 {
-                    b.Navigation("Tags");
-
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
