@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525165009_CalculateTotal")]
+    partial class CalculateTotal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,9 +82,6 @@ namespace BoardRoom.Migrations
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("Total")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -95,21 +94,18 @@ namespace BoardRoom.Migrations
                         {
                             Id = 1,
                             PaymentTypeId = 1,
-                            Total = 0m,
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             PaymentTypeId = 2,
-                            Total = 0m,
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
                             PaymentTypeId = 3,
-                            Total = 0m,
                             UserId = 3
                         });
                 });

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BoardRoom.DTOs;
+using BoardRoom.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoardRoom.API
 {
@@ -18,6 +20,49 @@ namespace BoardRoom.API
                 else
                 {
                     return Results.NotFound();
+                }
+            });
+
+            app.MapGet("/users", (BoardRoomDbContext db) =>
+            {
+                return db.Users.ToList();
+            });
+
+            app.MapPost("/users/new", (BoardRoomDbContext db, CreateUserDTO dto) =>
+            {
+                try
+                {
+                    User newUser = new()
+                    { 
+                        FirstName = dto.FirstName,
+                        LastName = dto.LastName,
+                        Username = dto.Username,
+                        ImageUrl = dto.ImageUrl,
+                        Email = dto.Email,
+                        IsHost = dto.IsHost,
+                        Uid = dto.Uid
+                    };
+                    db.Users.Add(newUser);
+                    db.SaveChanges();
+                    return Results.Created($"/users/{newUser.Id}", newUser);
+                }
+                catch
+                {
+                    return Results.BadRequest();
+                }
+            });
+
+            app.MapPost("/checkuser", (BoardRoomDbContext db, UserAuthDTO authUser) =>
+            {
+                var userUid = db.Users.SingleOrDefault(u => u.Uid == authUser.Uid);
+
+                if (userUid == null)
+                {
+                    return Results.NotFound();
+                }
+                else
+                {
+                    return Results.Ok(userUid);
                 }
             });
         }
