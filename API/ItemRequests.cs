@@ -78,6 +78,11 @@ namespace BoardRoom.API
                     return Results.NotFound("Unable to find the requested data");
                 }
 
+                if (room.Items == null)
+                {
+                    room.Items = new List<Item>();
+                }
+
                 room.Items.Add(item);
                 db.SaveChanges();
                 return Results.Created();

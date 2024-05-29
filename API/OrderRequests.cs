@@ -29,7 +29,7 @@ namespace BoardRoom.API
                 var response = new
                 {
                     id = id,
-                    total = order.Total,
+                    total = order.CalculateTotal,
                     items = order.Items.Select(item => new
                     {
                         id = item.Id,
@@ -157,6 +157,14 @@ namespace BoardRoom.API
                 db.SaveChanges();
 
                 return Results.Ok();
+            });
+
+            app.MapPost("/orders/new", (Order newOrder, BoardRoomDbContext db) =>
+            {
+                db.Orders.Add(newOrder);
+                db.SaveChanges();
+
+                return Results.Created($"/rooms/{newOrder.Id}", newOrder);
             });
 
         }
