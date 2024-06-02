@@ -21,9 +21,9 @@ namespace BoardRoom
         {
             modelBuilder.Entity<User>().HasData(new User[]
             {
-                new User { Id = 1, Username = "jordancarter", FirstName = "Jordan", LastName = "Carter", Email = "jordancarter@test.com", ImageUrl = "https://cdns-images.dzcdn.net/images/artist/16cc4a271b96586a46c35d8182412e92/1900x1900-000000-80-0-0.jpg", IsHost = false, Uid = "uid1" },
-                new User { Id = 2, Username = "testcase", FirstName = "Austin", LastName = "Post", Email = "postmalone@gmail.com", ImageUrl = "https://m.media-amazon.com/images/M/MV5BODg4N2I0NmEtNTIyMS00MzVjLThjYzgtODAwMzcwYThkMTVkXkEyXkFqcGdeQXVyMTI2Nzk3NzI4._V1_FMjpg_UX1000_.jpg", IsHost = false, Uid = "uid1" },
-                new User { Id = 3, Username = "fishtank", FirstName = "Jen", LastName = "Jones", Email = "jenjo@gmail.com", ImageUrl = "https://imageio.forbes.com/specials-images/imageserve/1189837141/2019-American-Music-Awards---Red-Carpet/960x0.jpg?format=jpg&width=960", IsHost = false, Uid = "uid1" },
+                new User { Id = 1, Username = "jordancarter", FirstName = "Jordan", LastName = "Carter", Email = "jordancarter@test.com", ImageUrl = "https://cdns-images.dzcdn.net/images/artist/16cc4a271b96586a46c35d8182412e92/1900x1900-000000-80-0-0.jpg", Bio = "hello! my bio", IsHost = false, Uid = "uid1" },
+                new User { Id = 2, Username = "testcase", FirstName = "Austin", LastName = "Post", Email = "postmalone@gmail.com", ImageUrl = "https://m.media-amazon.com/images/M/MV5BODg4N2I0NmEtNTIyMS00MzVjLThjYzgtODAwMzcwYThkMTVkXkEyXkFqcGdeQXVyMTI2Nzk3NzI4._V1_FMjpg_UX1000_.jpg", Bio = "hello! my bio", IsHost = false, Uid = "uid1" },
+                new User { Id = 3, Username = "fishtank", FirstName = "Jen", LastName = "Jones", Email = "jenjo@gmail.com", ImageUrl = "https://imageio.forbes.com/specials-images/imageserve/1189837141/2019-American-Music-Awards---Red-Carpet/960x0.jpg?format=jpg&width=960", Bio = "hello! my bio", IsHost = false, Uid = "uid1" },
             });
 
             modelBuilder.Entity<Order>().HasData(new Order[]

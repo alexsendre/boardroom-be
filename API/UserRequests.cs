@@ -28,7 +28,7 @@ namespace BoardRoom.API
                 return db.Users.ToList();
             });
 
-            app.MapPost("/users/new", (BoardRoomDbContext db, CreateUserDTO dto) =>
+            app.MapPost("/register", (BoardRoomDbContext db, CreateUserDTO dto) =>
             {
                 try
                 {
@@ -38,6 +38,7 @@ namespace BoardRoom.API
                         LastName = dto.LastName,
                         Username = dto.Username,
                         ImageUrl = dto.ImageUrl,
+                        Bio = dto.Bio,
                         Email = dto.Email,
                         IsHost = dto.IsHost,
                         Uid = dto.Uid
