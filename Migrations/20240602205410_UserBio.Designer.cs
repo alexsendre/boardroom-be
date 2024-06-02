@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240602205410_UserBio")]
+    partial class UserBio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,7 +231,12 @@ namespace BoardRoom.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Tags");
 
@@ -376,26 +383,18 @@ namespace BoardRoom.Migrations
                     b.ToTable("ItemRoom");
                 });
 
-            modelBuilder.Entity("RoomTag", b =>
-                {
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RoomsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("RoomTag");
-                });
-
             modelBuilder.Entity("BoardRoom.Models.Room", b =>
                 {
                     b.HasOne("BoardRoom.Models.Order", null)
                         .WithMany("Rooms")
                         .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("BoardRoom.Models.Tag", b =>
+                {
+                    b.HasOne("BoardRoom.Models.Room", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("RoomId");
                 });
 
             modelBuilder.Entity("BoardRoom.Models.User", b =>
@@ -439,21 +438,6 @@ namespace BoardRoom.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoomTag", b =>
-                {
-                    b.HasOne("BoardRoom.Models.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoardRoom.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BoardRoom.Models.Order", b =>
                 {
                     b.Navigation("Rooms");
@@ -463,6 +447,8 @@ namespace BoardRoom.Migrations
 
             modelBuilder.Entity("BoardRoom.Models.Room", b =>
                 {
+                    b.Navigation("Tags");
+
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
