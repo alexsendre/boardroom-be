@@ -33,6 +33,7 @@ namespace BoardRoom.API
                     price = room.Price,
                     imageUrl = room.ImageUrl,
                     description = room.Description,
+                    location = room.Location,
                     tags = room.Tags.Select(tag => new
                     {
                         id = tag.Id,
@@ -85,6 +86,7 @@ namespace BoardRoom.API
                 roomToUpdate.Price = updatedRoom.Price;
                 roomToUpdate.IsLeasable = updatedRoom.IsLeasable;
                 roomToUpdate.Description = updatedRoom.Description;
+                roomToUpdate.Location = updatedRoom.Location;
 
                 db.SaveChanges();
                 return Results.Created($"/rooms/edit/{updatedRoom.Id}", updatedRoom);
