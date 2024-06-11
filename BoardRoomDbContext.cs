@@ -28,16 +28,16 @@ namespace BoardRoom
 
             modelBuilder.Entity<Order>().HasData(new Order[]
             {
-                new Order { Id = 1, PaymentTypeId = 1, UserId = 1, Total = 0, },
-                new Order { Id = 2, PaymentTypeId = 2, UserId = 2, Total = 0 },
-                new Order { Id = 3, PaymentTypeId = 3, UserId = 3, Total = 0 },
+                new Order { Id = 1, PaymentTypeId = 1, UserId = 1, Address = "3939 Coco Mel", City = "Candy", State = "AK", Total = 0, },
+                new Order { Id = 2, PaymentTypeId = 2, UserId = 2, Address = "333 Angel Ln", City = "Brite", State = "TX", Total = 0 },
+                new Order { Id = 3, PaymentTypeId = 3, UserId = 3, Address = "1 W North St", City = "Harara", State = "CA", Total = 0 },
             });
 
             modelBuilder.Entity<Item>().HasData(new Item[]
             {
-                new Item { Id = 1, Name = "Monitor", Price = 159.99M, ImageUrl = "https://i.pcmag.com/imagery/reviews/05mQGIDQOTCx8qyj5vd3S8t-1.fit_lim.size_840x473.v1695825614.jpg" },
-                new Item { Id = 2, Name = "Deskpad", Price = 19.99M, ImageUrl = "https://images.stockx.com/images/FaZe-x-Murakami-Mousepad-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1637778655" },
-                new Item { Id = 3, Name = "Couch", Price = 349.99M, ImageUrl = "https://m.media-amazon.com/images/I/81Y5x1jljBL._AC_UF1000,1000_QL80_.jpg" },
+                new Item { Id = 1, Name = "Monitor", Price = 159.99M, RoomId = 1, HostId = 1, ImageUrl = "https://i.pcmag.com/imagery/reviews/05mQGIDQOTCx8qyj5vd3S8t-1.fit_lim.size_840x473.v1695825614.jpg" },
+                new Item { Id = 2, Name = "Deskpad", Price = 19.99M, RoomId = 2, HostId = 2, ImageUrl = "https://images.stockx.com/images/FaZe-x-Murakami-Mousepad-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1637778655" },
+                new Item { Id = 3, Name = "Couch", Price = 349.99M, RoomId = 3, HostId = 3, ImageUrl = "https://m.media-amazon.com/images/I/81Y5x1jljBL._AC_UF1000,1000_QL80_.jpg" },
             });
 
             modelBuilder.Entity<Room>().HasData(new Room[]

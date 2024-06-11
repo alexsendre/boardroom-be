@@ -34,6 +34,7 @@ namespace BoardRoom.API
                     imageUrl = room.ImageUrl,
                     description = room.Description,
                     location = room.Location,
+                    hostId = room.HostId,
                     tags = room.Tags.Select(tag => new
                     {
                         id = tag.Id,

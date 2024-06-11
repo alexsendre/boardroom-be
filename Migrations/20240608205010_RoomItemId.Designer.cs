@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608205010_RoomItemId")]
+    partial class RoomItemId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace BoardRoom.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("HostId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -55,7 +54,6 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            HostId = 1,
                             ImageUrl = "https://i.pcmag.com/imagery/reviews/05mQGIDQOTCx8qyj5vd3S8t-1.fit_lim.size_840x473.v1695825614.jpg",
                             Name = "Monitor",
                             Price = 159.99m,
@@ -64,7 +62,6 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 2,
-                            HostId = 2,
                             ImageUrl = "https://images.stockx.com/images/FaZe-x-Murakami-Mousepad-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1637778655",
                             Name = "Deskpad",
                             Price = 19.99m,
@@ -73,7 +70,6 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 3,
-                            HostId = 3,
                             ImageUrl = "https://m.media-amazon.com/images/I/81Y5x1jljBL._AC_UF1000,1000_QL80_.jpg",
                             Name = "Couch",
                             Price = 349.99m,
@@ -89,20 +85,8 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<decimal?>("Total")
                         .HasColumnType("numeric");
@@ -118,30 +102,21 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "3939 Coco Mel",
-                            City = "Candy",
                             PaymentTypeId = 1,
-                            State = "AK",
                             Total = 0m,
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Address = "333 Angel Ln",
-                            City = "Brite",
                             PaymentTypeId = 2,
-                            State = "TX",
                             Total = 0m,
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Address = "1 W North St",
-                            City = "Harara",
                             PaymentTypeId = 3,
-                            State = "CA",
                             Total = 0m,
                             UserId = 3
                         });
