@@ -8,7 +8,7 @@
         public string Description { get; set; }
         public string Location { get; set; }
         public string ImageUrl { get; set; }
-        public int HostId { get; set; }
+        public int SellerId { get; set; }
         public bool IsLeasable { get; set; }
 
         public ICollection<User>? Users { get; set; }

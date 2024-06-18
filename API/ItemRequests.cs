@@ -84,7 +84,7 @@ namespace BoardRoom.API
                     Price = newItem.Price,
                     ImageUrl = newItem.ImageUrl,
                     RoomId = roomId,
-                    HostId = newItem.HostId,
+                    SellerId = newItem.SellerId,
                 };
 
                 if (room.Items == null)

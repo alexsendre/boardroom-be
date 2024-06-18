@@ -34,7 +34,7 @@ namespace BoardRoom.API
                     imageUrl = room.ImageUrl,
                     description = room.Description,
                     location = room.Location,
-                    hostId = room.HostId,
+                    sellerId = room.SellerId,
                     tags = room.Tags.Select(tag => new
                     {
                         id = tag.Id,
@@ -51,8 +51,23 @@ namespace BoardRoom.API
                 return Results.Ok(response);
             });
 
-            app.MapPost("/rooms/new", (Room newRoom, BoardRoomDbContext db) =>
+            app.MapPost("/rooms/new", (Room roomObj, BoardRoomDbContext db) =>
             {
+                Room newRoom = new Room();
+                newRoom.Title = roomObj.Title;
+                newRoom.Price = roomObj.Price;
+                newRoom.Description = roomObj.Description;
+                newRoom.Location = roomObj.Location;
+                newRoom.ImageUrl = roomObj.ImageUrl;
+                newRoom.SellerId = roomObj.SellerId;
+
+                newRoom.Tags = new List<Tag>();
+                foreach (var tag in roomObj.Tags)
+                {
+                    Tag selectedTag = db.Tags.SingleOrDefault(t => t.Id == tag.Id);
+                    newRoom.Tags.Add(selectedTag);
+                }
+
                 db.Rooms.Add(newRoom);
                 db.SaveChanges();
 
@@ -89,31 +104,45 @@ namespace BoardRoom.API
                 roomToUpdate.Description = updatedRoom.Description;
                 roomToUpdate.Location = updatedRoom.Location;
 
+                if (updatedRoom.Tags != null)
+                {
+                    roomToUpdate.Tags = new List<Tag>();
+
+                    foreach (var tag in updatedRoom.Tags)
+                    {
+                        var newTag = db.Tags.SingleOrDefault(t => t.Id == tag.Id);
+                        roomToUpdate.Tags.Add(newTag);
+                    }
+                }
+
                 db.SaveChanges();
                 return Results.Created($"/rooms/edit/{updatedRoom.Id}", updatedRoom);
             });
 
             app.MapPost("/rooms/{roomId}/tags", (BoardRoomDbContext db, RoomTagDTO newTag) =>
             {
-                var room = db.Rooms.Include(x => x.Tags).FirstOrDefault(x => x.Id == newTag.RoomId);
-                var tagToAdd = db.Tags.Find(newTag.TagId);
+                Room room = db.Rooms.Include(x => x.Tags).SingleOrDefault(x => x.Id == newTag.RoomId);
+                Tag tag = db.Tags.SingleOrDefault(x => x.Id == newTag.TagId);
 
-                if (room == null || tagToAdd == null)
+                if (room == null)
                 {
-                    return Results.NotFound();
+                    return Results.BadRequest();
                 }
 
                 try
                 {
-                    room.Tags.Add(tagToAdd);
+                    room.Tags.Add(tag);
                     db.SaveChanges();
-                    return Results.Created($"/rooms/{newTag.RoomId}/tags/{newTag.TagId}", tagToAdd);
+                    return Results.Ok(newTag);
                 }
                 catch
                 {
                     return Results.BadRequest("There was an error with the data submitted");
                 }
             });
+
+
+
 
             app.MapDelete("/rooms/{roomId}/tags/{tagId}", (BoardRoomDbContext db, int roomId, int tagId) =>
             {

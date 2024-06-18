@@ -9,6 +9,7 @@
         public string City { get; set; }
         public string State { get; set; }
         public decimal? Total { get; set; }
+        public bool IsClosed { get; set; }
 
         public ICollection<User> Users { get; set; }
         public ICollection<Room> Rooms { get; set; } = new List<Room>();

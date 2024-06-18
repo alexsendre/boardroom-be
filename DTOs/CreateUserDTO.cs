@@ -8,7 +8,7 @@
         public string Email { get; set; }
         public string Bio { get; set; }
         public string ImageUrl { get; set; }
-        public bool IsHost { get; set; }
+        public bool IsSeller { get; set; }
         public string Uid { get; set; }
     }
 }
