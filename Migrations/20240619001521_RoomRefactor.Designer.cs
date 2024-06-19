@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240619001521_RoomRefactor")]
+    partial class RoomRefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,6 +329,9 @@ namespace BoardRoom.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("RoomId")
                         .HasColumnType("integer");
 
@@ -338,6 +343,8 @@ namespace BoardRoom.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("RoomId");
 
@@ -412,21 +419,6 @@ namespace BoardRoom.Migrations
                     b.ToTable("ItemRoom");
                 });
 
-            modelBuilder.Entity("OrderUser", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrdersId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("OrderUser");
-                });
-
             modelBuilder.Entity("RoomTag", b =>
                 {
                     b.Property<int>("RoomsId")
@@ -451,6 +443,10 @@ namespace BoardRoom.Migrations
 
             modelBuilder.Entity("BoardRoom.Models.User", b =>
                 {
+                    b.HasOne("BoardRoom.Models.Order", null)
+                        .WithMany("Users")
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("BoardRoom.Models.Room", null)
                         .WithMany("Users")
                         .HasForeignKey("RoomId");
@@ -486,21 +482,6 @@ namespace BoardRoom.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderUser", b =>
-                {
-                    b.HasOne("BoardRoom.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoardRoom.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RoomTag", b =>
                 {
                     b.HasOne("BoardRoom.Models.Room", null)
@@ -519,6 +500,8 @@ namespace BoardRoom.Migrations
             modelBuilder.Entity("BoardRoom.Models.Order", b =>
                 {
                     b.Navigation("Rooms");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BoardRoom.Models.Room", b =>

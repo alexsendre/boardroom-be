@@ -30,7 +30,6 @@ namespace BoardRoom.API
                 {
                     id = id,
                     title = room.Title,
-                    price = room.Price,
                     imageUrl = room.ImageUrl,
                     description = room.Description,
                     location = room.Location,
@@ -55,7 +54,6 @@ namespace BoardRoom.API
             {
                 Room newRoom = new Room();
                 newRoom.Title = roomObj.Title;
-                newRoom.Price = roomObj.Price;
                 newRoom.Description = roomObj.Description;
                 newRoom.Location = roomObj.Location;
                 newRoom.ImageUrl = roomObj.ImageUrl;
@@ -99,8 +97,6 @@ namespace BoardRoom.API
 
                 roomToUpdate.Title = updatedRoom.Title;
                 roomToUpdate.ImageUrl = updatedRoom.ImageUrl;
-                roomToUpdate.Price = updatedRoom.Price;
-                roomToUpdate.IsLeasable = updatedRoom.IsLeasable;
                 roomToUpdate.Description = updatedRoom.Description;
                 roomToUpdate.Location = updatedRoom.Location;
 

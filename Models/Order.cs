@@ -18,11 +18,10 @@
         {
             get
             {
-                if (Items.Any() || Rooms.Any())
+                if (Items.Any())
                 {
                     decimal? itemTotal = Items.Sum(item => item.Price);
-                    decimal? roomTotal = Rooms.Sum(room => room.Price);
-                    return itemTotal + roomTotal;
+                    return itemTotal;
                 }
                 else
                 {

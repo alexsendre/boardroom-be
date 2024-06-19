@@ -30,6 +30,7 @@ namespace BoardRoom.API
                 {
                     id = id,
                     address = order.Address,
+                    buyer = order.UserId,
                     city = order.City,
                     state = order.State,
                     total = order.CalculateTotal,
@@ -46,18 +47,8 @@ namespace BoardRoom.API
                     {
                         id = room.Id,
                         title = room.Title,
-                        price = room.Price,
                         imageUrl = room.ImageUrl,
-                        isLeasable = room.IsLeasable,
                     }),
-                    buyer = order.Users.Select(user => new
-                    {
-                        id = user.Id,
-                        username = user.Username,
-                        firstName = user.FirstName,
-                        lastName = user.LastName,
-                        email = user.Email,
-                    })
                 };
                 return Results.Ok(response);
             });

@@ -42,9 +42,9 @@ namespace BoardRoom
 
             modelBuilder.Entity<Room>().HasData(new Room[]
             {
-                new Room { Id = 1, Title = "Room 1", Price = 39.99M, ImageUrl = "https://i.pinimg.com/564x/59/fb/79/59fb7976ceae747a206a79a426093824.jpg", Description = "this is a nice description for room 1!", Location = "Lexington, KY", SellerId = 1, IsLeasable = true },
-                new Room { Id = 2, Title = "Room 2", Price = 49.99M, ImageUrl = "https://i.pinimg.com/564x/c5/f7/78/c5f7782a1e831c2d2f481404f39a3588.jpg", Description = "this is a nice description for room 2!", Location = "Nashville, TN", SellerId = 2, IsLeasable = true },
-                new Room { Id = 3, Title = "Room 3", Price = 59.99M, ImageUrl = "https://i.pinimg.com/564x/70/28/82/702882477d62e948ae11f3f73cce3a66.jpg", Description = "this is a nice description for room 3!", Location = "Houston, TX", SellerId = 3, IsLeasable = false },
+                new Room { Id = 1, Title = "Room 1", ImageUrl = "https://i.pinimg.com/564x/59/fb/79/59fb7976ceae747a206a79a426093824.jpg", Description = "this is a nice description for room 1!", Location = "Lexington, KY", SellerId = 1 },
+                new Room { Id = 2, Title = "Room 2", ImageUrl = "https://i.pinimg.com/564x/c5/f7/78/c5f7782a1e831c2d2f481404f39a3588.jpg", Description = "this is a nice description for room 2!", Location = "Nashville, TN", SellerId = 2 },
+                new Room { Id = 3, Title = "Room 3", ImageUrl = "https://i.pinimg.com/564x/70/28/82/702882477d62e948ae11f3f73cce3a66.jpg", Description = "this is a nice description for room 3!", Location = "Houston, TX", SellerId = 3 },
             });
 
             modelBuilder.Entity<PaymentType>().HasData(new PaymentType[]

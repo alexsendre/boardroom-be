@@ -1,4 +1,6 @@
-﻿namespace BoardRoom.API
+﻿using BoardRoom.Models;
+
+namespace BoardRoom.API
 {
     public class PaymentTypeRequests
     {
@@ -9,15 +11,17 @@
                 return db.PaymentTypes.ToList();
             });
 
-            app.MapGet("/checkout/types/{id}", (BoardRoomDbContext db, int id) =>
+            app.MapGet("/checkout/types/{typeId}", (BoardRoomDbContext db, int typeId) =>
             {
-                var paymentType = db.PaymentTypes.FirstOrDefault(x => x.Id == id);
-                if (paymentType == null)
+                var paymentType = db.PaymentTypes.SingleOrDefault(p => p.Id == typeId);
+                if (paymentType != null)
+                {
+                    return Results.Ok(paymentType);
+                }
+                else
                 {
                     return Results.NotFound();
                 }
-
-                return Results.Ok(paymentType);
             });
         }
     }

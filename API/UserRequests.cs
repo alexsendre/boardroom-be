@@ -84,6 +84,26 @@ namespace BoardRoom.API
                     return Results.Ok(userUid);
                 }
             });
+
+            app.MapGet("/users/{id}/orders", (BoardRoomDbContext db, int id) =>
+            {
+                var user = db.Users.Include(u => u.Orders).SingleOrDefault(u => u.Id == id);
+                var response = new
+                {
+                    orderDetails = user.Orders.Select(order => new
+                    {
+                        id = order.Id,
+                        userId = id,
+                        paymentTypeId = order.PaymentTypeId,
+                        address = order.Address,
+                        city = order.City,
+                        state = order.State,
+                        isClosed = order.IsClosed,
+                        CalculateTotal = order.CalculateTotal,
+                    })
+                };
+                return Results.Ok(response);
+            });
         }
     }
 }

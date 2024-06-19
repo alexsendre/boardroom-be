@@ -14,5 +14,7 @@ namespace BoardRoom.Models
         public string? ImageUrl { get; set; }
         public bool IsSeller { get; set; }
         public string? Uid { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }
