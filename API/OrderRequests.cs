@@ -29,7 +29,13 @@ namespace BoardRoom.API
                 var response = new
                 {
                     id = id,
+                    address = order.Address,
+                    buyer = order.UserId,
+                    city = order.City,
+                    state = order.State,
                     total = order.CalculateTotal,
+                    isClosed = order.IsClosed,
+                    paymentTypeId = order.PaymentTypeId,
                     items = order.Items.Select(item => new
                     {
                         id = item.Id,
@@ -41,18 +47,8 @@ namespace BoardRoom.API
                     {
                         id = room.Id,
                         title = room.Title,
-                        price = room.Price,
                         imageUrl = room.ImageUrl,
-                        isLeasable = room.IsLeasable,
                     }),
-                    buyer = order.Users.Select(user => new
-                    {
-                        id = user.Id,
-                        username = user.Username,
-                        firstName = user.FirstName,
-                        lastName = user.LastName,
-                        email = user.Email,
-                    })
                 };
                 return Results.Ok(response);
             });
@@ -165,6 +161,29 @@ namespace BoardRoom.API
                 db.SaveChanges();
 
                 return Results.Created($"/rooms/{newOrder.Id}", newOrder);
+            });
+
+            app.MapGet("/orders/{id}/items", (BoardRoomDbContext db, int id) =>
+            {
+                var order = db.Orders.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+                return Results.Ok(order);
+            });
+
+            app.MapPatch("/orders/{orderId}/complete", async (BoardRoomDbContext db, int orderId) =>
+            {
+                var order = await db.Orders.FindAsync(orderId);
+
+                if (order == null)
+                {
+                    return Results.NotFound();
+                }
+
+                order.IsClosed = true;
+
+                db.Orders.Update(order);
+                await db.SaveChangesAsync();
+
+                return Results.Ok(order);
             });
 
         }

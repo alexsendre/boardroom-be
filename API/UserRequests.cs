@@ -38,23 +38,42 @@ namespace BoardRoom.API
                         LastName = dto.LastName,
                         Username = dto.Username,
                         ImageUrl = dto.ImageUrl,
+                        Bio = dto.Bio,
                         Email = dto.Email,
-                        IsHost = dto.IsHost,
+                        IsSeller = dto.IsSeller,
                         Uid = dto.Uid
                     };
                     db.Users.Add(newUser);
                     db.SaveChanges();
                     return Results.Created($"/users/{newUser.Id}", newUser);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return Results.BadRequest();
+                    return Results.BadRequest(ex);
                 }
             });
 
-            app.MapPost("/checkuser", (BoardRoomDbContext db, UserAuthDTO authUser) =>
+            app.MapPatch("/users/{userId}/update", (BoardRoomDbContext db, int userId, CreateUserDTO dto) =>
             {
-                var userUid = db.Users.SingleOrDefault(u => u.Uid == authUser.Uid);
+                var user = db.Users.FirstOrDefault(u => u.Id == userId);
+                if (user == null)
+                {
+                    return Results.NotFound();
+                }
+
+                user.FirstName = dto.FirstName;
+                user.LastName = dto.LastName;
+                user.Bio = dto.Bio;
+                user.Email = dto.Email;
+                user.ImageUrl = dto.ImageUrl;
+
+                db.SaveChanges();
+                return Results.Ok(user);
+            });
+
+            app.MapPost("/checkuser/{uid}", (BoardRoomDbContext db, UserAuthDTO authUser) =>
+            {
+                var userUid = db.Users.Where(u => u.Uid == authUser.Uid).FirstOrDefault();
 
                 if (userUid == null)
                 {
@@ -64,6 +83,26 @@ namespace BoardRoom.API
                 {
                     return Results.Ok(userUid);
                 }
+            });
+
+            app.MapGet("/users/{id}/orders", (BoardRoomDbContext db, int id) =>
+            {
+                var user = db.Users.Include(u => u.Orders).SingleOrDefault(u => u.Id == id);
+                var response = new
+                {
+                    orderDetails = user.Orders.Select(order => new
+                    {
+                        id = order.Id,
+                        userId = id,
+                        paymentTypeId = order.PaymentTypeId,
+                        address = order.Address,
+                        city = order.City,
+                        state = order.State,
+                        isClosed = order.IsClosed,
+                        CalculateTotal = order.CalculateTotal,
+                    })
+                };
+                return Results.Ok(response);
             });
         }
     }

@@ -3,6 +3,7 @@ using System;
 using BoardRoom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BoardRoom.Migrations
 {
     [DbContext(typeof(BoardRoomDbContext))]
-    partial class BoardRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608205010_RoomItemId")]
+    partial class RoomItemId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,9 +46,6 @@ namespace BoardRoom.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.ToTable("Items");
@@ -58,8 +57,7 @@ namespace BoardRoom.Migrations
                             ImageUrl = "https://i.pcmag.com/imagery/reviews/05mQGIDQOTCx8qyj5vd3S8t-1.fit_lim.size_840x473.v1695825614.jpg",
                             Name = "Monitor",
                             Price = 159.99m,
-                            RoomId = 1,
-                            SellerId = 1
+                            RoomId = 1
                         },
                         new
                         {
@@ -67,8 +65,7 @@ namespace BoardRoom.Migrations
                             ImageUrl = "https://images.stockx.com/images/FaZe-x-Murakami-Mousepad-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1637778655",
                             Name = "Deskpad",
                             Price = 19.99m,
-                            RoomId = 2,
-                            SellerId = 2
+                            RoomId = 2
                         },
                         new
                         {
@@ -76,8 +73,7 @@ namespace BoardRoom.Migrations
                             ImageUrl = "https://m.media-amazon.com/images/I/81Y5x1jljBL._AC_UF1000,1000_QL80_.jpg",
                             Name = "Couch",
                             Price = 349.99m,
-                            RoomId = 3,
-                            SellerId = 3
+                            RoomId = 3
                         });
                 });
 
@@ -89,23 +85,8 @@ namespace BoardRoom.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsClosed")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<decimal?>("Total")
                         .HasColumnType("numeric");
@@ -121,33 +102,21 @@ namespace BoardRoom.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "3939 Coco Mel",
-                            City = "Candy",
-                            IsClosed = true,
                             PaymentTypeId = 1,
-                            State = "AK",
                             Total = 0m,
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Address = "333 Angel Ln",
-                            City = "Brite",
-                            IsClosed = true,
                             PaymentTypeId = 2,
-                            State = "TX",
                             Total = 0m,
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Address = "1 W North St",
-                            City = "Harara",
-                            IsClosed = false,
                             PaymentTypeId = 3,
-                            State = "CA",
                             Total = 0m,
                             UserId = 3
                         });
@@ -204,9 +173,15 @@ namespace BoardRoom.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("HostId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsLeasable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -215,8 +190,8 @@ namespace BoardRoom.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -233,27 +208,33 @@ namespace BoardRoom.Migrations
                         {
                             Id = 1,
                             Description = "this is a nice description for room 1!",
+                            HostId = 1,
                             ImageUrl = "https://i.pinimg.com/564x/59/fb/79/59fb7976ceae747a206a79a426093824.jpg",
+                            IsLeasable = true,
                             Location = "Lexington, KY",
-                            SellerId = 1,
+                            Price = 39.99m,
                             Title = "Room 1"
                         },
                         new
                         {
                             Id = 2,
                             Description = "this is a nice description for room 2!",
+                            HostId = 2,
                             ImageUrl = "https://i.pinimg.com/564x/c5/f7/78/c5f7782a1e831c2d2f481404f39a3588.jpg",
+                            IsLeasable = true,
                             Location = "Nashville, TN",
-                            SellerId = 2,
+                            Price = 49.99m,
                             Title = "Room 2"
                         },
                         new
                         {
                             Id = 3,
                             Description = "this is a nice description for room 3!",
+                            HostId = 3,
                             ImageUrl = "https://i.pinimg.com/564x/70/28/82/702882477d62e948ae11f3f73cce3a66.jpg",
+                            IsLeasable = false,
                             Location = "Houston, TX",
-                            SellerId = 3,
+                            Price = 59.99m,
                             Title = "Room 3"
                         });
                 });
@@ -320,12 +301,15 @@ namespace BoardRoom.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsSeller")
+                    b.Property<bool>("IsHost")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("RoomId")
                         .HasColumnType("integer");
@@ -339,6 +323,8 @@ namespace BoardRoom.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId");
+
                     b.HasIndex("RoomId");
 
                     b.ToTable("Users");
@@ -351,7 +337,7 @@ namespace BoardRoom.Migrations
                             Email = "jordancarter@test.com",
                             FirstName = "Jordan",
                             ImageUrl = "https://cdns-images.dzcdn.net/images/artist/16cc4a271b96586a46c35d8182412e92/1900x1900-000000-80-0-0.jpg",
-                            IsSeller = false,
+                            IsHost = false,
                             LastName = "Carter",
                             Uid = "uid1",
                             Username = "jordancarter"
@@ -363,7 +349,7 @@ namespace BoardRoom.Migrations
                             Email = "postmalone@gmail.com",
                             FirstName = "Austin",
                             ImageUrl = "https://m.media-amazon.com/images/M/MV5BODg4N2I0NmEtNTIyMS00MzVjLThjYzgtODAwMzcwYThkMTVkXkEyXkFqcGdeQXVyMTI2Nzk3NzI4._V1_FMjpg_UX1000_.jpg",
-                            IsSeller = false,
+                            IsHost = false,
                             LastName = "Post",
                             Uid = "uid1",
                             Username = "testcase"
@@ -375,7 +361,7 @@ namespace BoardRoom.Migrations
                             Email = "jenjo@gmail.com",
                             FirstName = "Jen",
                             ImageUrl = "https://imageio.forbes.com/specials-images/imageserve/1189837141/2019-American-Music-Awards---Red-Carpet/960x0.jpg?format=jpg&width=960",
-                            IsSeller = false,
+                            IsHost = false,
                             LastName = "Jones",
                             Uid = "uid1",
                             Username = "fishtank"
@@ -412,21 +398,6 @@ namespace BoardRoom.Migrations
                     b.ToTable("ItemRoom");
                 });
 
-            modelBuilder.Entity("OrderUser", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrdersId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("OrderUser");
-                });
-
             modelBuilder.Entity("RoomTag", b =>
                 {
                     b.Property<int>("RoomsId")
@@ -451,6 +422,10 @@ namespace BoardRoom.Migrations
 
             modelBuilder.Entity("BoardRoom.Models.User", b =>
                 {
+                    b.HasOne("BoardRoom.Models.Order", null)
+                        .WithMany("Users")
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("BoardRoom.Models.Room", null)
                         .WithMany("Users")
                         .HasForeignKey("RoomId");
@@ -486,21 +461,6 @@ namespace BoardRoom.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderUser", b =>
-                {
-                    b.HasOne("BoardRoom.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoardRoom.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RoomTag", b =>
                 {
                     b.HasOne("BoardRoom.Models.Room", null)
@@ -519,6 +479,8 @@ namespace BoardRoom.Migrations
             modelBuilder.Entity("BoardRoom.Models.Order", b =>
                 {
                     b.Navigation("Rooms");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BoardRoom.Models.Room", b =>

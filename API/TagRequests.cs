@@ -18,6 +18,12 @@ namespace BoardRoom.API
 
                 return Results.Created($"/rooms/{newTag.Id}", newTag);
             });
+
+            app.MapGet("/tags/{id}", (BoardRoomDbContext db, int id) =>
+            {
+                var tag = db.Tags.FirstOrDefault(t => t.Id == id);
+                return Results.Ok(tag);
+            });
         }
     }
 }

@@ -68,15 +68,24 @@ namespace BoardRoom.API
                 return Results.NoContent();
             });
 
-            app.MapPost("/rooms/{roomId}/items/{itemId}", (BoardRoomDbContext db, int roomId, int itemId) =>
+            app.MapPost("/rooms/{roomId}/items", (BoardRoomDbContext db, Item newItem, int roomId) =>
             {
                 var room = db.Rooms.Include(x => x.Tags).FirstOrDefault(x => x.Id == roomId);
-                var item = db.Items.Find(itemId);
 
-                if (room == null || item == null)
+                if (room == null)
                 {
-                    return Results.NotFound("Unable to find the requested data");
+                    return Results.NotFound("Unable to find room");
                 }
+
+                var item = new Item
+                {
+                    Id = newItem.Id,
+                    Name = newItem.Name,
+                    Price = newItem.Price,
+                    ImageUrl = newItem.ImageUrl,
+                    RoomId = roomId,
+                    SellerId = newItem.SellerId,
+                };
 
                 if (room.Items == null)
                 {
@@ -86,6 +95,44 @@ namespace BoardRoom.API
                 room.Items.Add(item);
                 db.SaveChanges();
                 return Results.Created();
+            });
+
+            app.MapDelete("/rooms/{roomId}/items/{itemId}", (BoardRoomDbContext db, int roomId, int itemId) =>
+            {
+                var room = db.Rooms.Include(r => r.Items).FirstOrDefault(r => r.Id == roomId);
+                var item = db.Items.Find(itemId);
+
+                if (room == null || item == null)
+                {
+                    return Results.NotFound("Unable to find the requested data");
+                }
+
+                room.Items.Remove(item);
+                db.SaveChanges();
+                return Results.NoContent();
+            });
+
+            app.MapGet("/rooms/{roomId}/items", (BoardRoomDbContext db, int roomId) =>
+            {
+                var room = db.Rooms.Include(r => r.Items).FirstOrDefault(r => r.Id == roomId);
+                if (room == null)
+                {
+                    return Results.NotFound();
+                }
+
+                var response = new
+                {
+                    items = room.Items.Select(item => new
+                    {
+                        id = item.Id,
+                        name = item.Name,
+                        price = item.Price,
+                        imageUrl = item.ImageUrl,
+                        roomId = roomId,
+                    })
+                };
+
+                return Results.Ok(response);
             });
         }
     }
