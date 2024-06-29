@@ -71,17 +71,33 @@ namespace BoardRoom.API
                 return Results.Ok(user);
             });
 
-            app.MapPost("/checkuser/{uid}", (BoardRoomDbContext db, UserAuthDTO authUser) =>
+            app.MapPost("/checkuser", (BoardRoomDbContext db, UserAuthDTO authUser) =>
             {
-                var userUid = db.Users.Where(u => u.Uid == authUser.Uid).FirstOrDefault();
+                var userUid = db.Users.SingleOrDefault(u => u.Uid == authUser.Uid);
 
                 if (userUid == null)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound("Couldn't find user");
                 }
                 else
                 {
                     return Results.Ok(userUid);
+                }
+            });
+
+            app.MapPost("/register", async (BoardRoomDbContext db, User user) =>
+            {
+                var userUid = await db.Users.SingleOrDefaultAsync(u => u.Uid == user.Uid);
+
+                if (userUid != null)
+                {
+                    return Results.BadRequest("Existing user");
+                }
+                else
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return Results.Created($"/users/{user.Id}", user);
                 }
             });
 
